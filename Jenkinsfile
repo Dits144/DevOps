@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image..."
-                    withCredentials([usernamePassword(credentialsId: '9946e4cd-bb94-427b-a87c-45a5596a0d93', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
 
                         echo "Checking Docker installation..."
 
