@@ -1,29 +1,34 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Branch name')
+    }
+
     stages {
         stage('Test') {
             steps {
                 script {
                     echo "Testing the application..."
-                    echo "Executing pipeline for branch ${BRANCH_NAME}" 
+                    echo "Executing pipeline for branch ${params.BRANCH_NAME}"
                 }
             }
         }
 
-        stage("Build") {
-    steps {
-        script {
-            def branch = env.BRANCH_NAME ?: 'unknown'
-            echo "Building branch ${branch}"
+        stage('Build') {
+            when {
+                expression { params.BRANCH_NAME == 'master' }
+            }
+            steps {
+                script {
+                    echo "Building the application..."
+                }
+            }
         }
-    }
-}
-
 
         stage('Deploy') {
             when {
-                expression { BRANCH_NAME == 'main' }
+                expression { params.BRANCH_NAME == 'master' }
             }
             steps {
                 script {
