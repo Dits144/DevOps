@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image..."
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credential', passwordVariables: 'PASS', usernameVariable: 'USER')]) {
+                    withCredentials([usernamePassword(credentialsId: '9946e4cd-bb94-427b-a87c-45a5596a0d93', passwordVariables: 'PASS', usernameVariable: 'USER')]) {
 
                     echo "Logging in to DockerHub..."
                     sh 'echo "$PASS" | docker login -u "$USER" --password-stdin'
