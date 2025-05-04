@@ -5,11 +5,6 @@ pipeline {
         maven 'maven-3.9'
     }
 
-    environment {
-        USER = credentials('docker-hub-credential) // ID credentials Jenkins Anda
-        PASS = credentials('dockerhub-password')
-    }
-
     stages {
         stage('Build jar') {
             steps {
@@ -24,13 +19,14 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image..."
-                    sh 'docker build -t yourdockerhubusername/your-image-name:latest .'
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credential', passwordVariables: 'PASS', usernameVariable: 'USER')]) {
 
                     echo "Logging in to DockerHub..."
                     sh 'echo "$PASS" | docker login -u "$USER" --password-stdin'
 
                     echo "Pushing Docker image..."
                     sh 'docker push yourdockerhubusername/your-image-name:latest'
+                    }
                 }
             }
         }
