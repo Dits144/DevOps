@@ -1,38 +1,39 @@
 pipeline {
     agent any
 
-    parameters {
-        string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Branch name')
-    }
-
     stages {
-        stage('Test') {
+        stage('Build') {
             steps {
                 script {
-                    echo "Testing the application..."
-                    echo "Executing pipeline for branch ${params.BRANCH_NAME}"
+                    echo "Building the Docker image..."
+                    sh 'docker build -t my-image .'
                 }
             }
         }
 
-        stage('Build') {
-            when {
-                expression { params.BRANCH_NAME == 'master' }
-            }
+        stage('Login to DockerHub') {
             steps {
                 script {
-                    echo "Building the application..."
+                    echo "Logging in to DockerHub..."
+                    sh 'echo "$PASS" | docker login -u "$USER" --password-stdin'
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    echo "Pushing the Docker image to registry..."
+                    sh 'docker push my-image'
                 }
             }
         }
 
         stage('Deploy') {
-            when {
-                expression { params.BRANCH_NAME == 'master' }
-            }
             steps {
                 script {
                     echo "Deploying the application..."
+                    // Tambahkan perintah deploy Anda di sini
                 }
             }
         }
