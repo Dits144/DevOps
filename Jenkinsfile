@@ -11,16 +11,15 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            when {
-                expression { BRANCH_NAME == 'main' } 
-            }
-            steps {
-                script {
-                    echo "Building the application..."
-                }
-            }
+        stage("Build") {
+    steps {
+        script {
+            def branch = env.BRANCH_NAME ?: 'unknown'
+            echo "Building branch ${branch}"
         }
+    }
+}
+
 
         stage('Deploy') {
             when {
